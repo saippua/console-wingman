@@ -15,7 +15,7 @@ generatePrompt =
     \User wants assistance with the following command:\n\n\
     \%s\n\n\
     \Respond with a command that can be used to achieve the desired result.\n\
-    \Command shoud be suitable for Linux-based OS.\n\
+    \Command should be suitable for Linux-based OS.\n\
     \Output only the command, do not include any additional text. \n\
     \Do not include any quotes or backticks in the output.\n"
 
