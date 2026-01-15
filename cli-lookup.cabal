@@ -1,0 +1,35 @@
+cabal-version:      3.0
+name:               cli-lookup
+version:            0.1.0.0
+-- synopsis:
+-- description:
+license:            BSD-3-Clause
+license-file:       LICENSE
+author:             Olli Koskelainen
+maintainer:         ollikos92@gmail.com
+-- copyright:
+category:           Development
+build-type:         Simple
+extra-doc-files:    CHANGELOG.md
+-- extra-source-files:
+
+common warnings
+    ghc-options: -Wall
+
+executable cli-lookup
+    import:           warnings
+    main-is:          Main.hs
+    other-modules:    Gemini,
+                      Args,
+                      Lib
+    -- other-extensions:
+    build-depends:    base ^>=4.18.3.0,
+                      aeson,
+                      text,
+                      unordered-containers,
+                      vector,
+                      bytestring,
+                      process,
+                      directory
+    hs-source-dirs:   app
+    default-language: Haskell2010
