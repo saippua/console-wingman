@@ -1,4 +1,4 @@
-cli-lookup-widget() {
+console-wingman-widget() {
     if ! command -v jq &> /dev/null; then
       echo -e "\033[31m[ERROR]\033[0m jq not found on path! try: sudo apt install jq" >&2
       return 1
@@ -45,5 +45,5 @@ Do not include any quotes or backticks in the output."
     fi
 }
 
-bind -x '"\C-g": cli-lookup-widget'
+bind -x '"\C-g": console-wingman-widget'
 
