@@ -1,25 +1,53 @@
-# CLI-Lookup
+# Console-Wingman
 
 A command-line assistant that transforms natural language descriptions into shell commands using AI.
 
 ## Prerequisites
 
 - set `GEMINI_API_KEY` environment variable (https://aistudio.google.com/app/api-keys)
-- `bash` or `powershell`
+
+### Supported platforms
+
+- `bash`
+- `powershell`
 
 ## Installation
 
+Source these in your profile script(s) to make the tool available in every new shell instance
+
 ```bash
-source cli/bash/cli-lookup.zsh
+# Linux (bash)
+source cli/bash/console-wingman.sh
 ```
 
 or
 
 ```powershell
-./cli/pwsh/cli-lookup.ps1
+# Windows (powershell)
+.\cli\pwsh\console-wingman.ps1
 ```
 
-Add these to your profile script(s) to make the tool available in every new shell instance
+### Standalone installation commands
+
+Run these commands on a system to download the script and add it to the profile
+
+```bash
+# Linux (bash)
+# Download the script
+curl -fsSL "https://raw.githubusercontent.com/saippua/console-wingman/main/cli/bash/console-wingman.sh" -o "$HOME/.console-wingman.sh"
+# Source it in the profile
+grep -qxF 'source "$HOME/.console-wingman.sh"' "$HOME/.bashrc" || echo 'source "$HOME/.console-wingman.sh"' >> "$HOME/.bashrc"
+```
+
+or
+
+```powershell
+# Windows (powershell)
+# Download the script
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/saippua/console-wingman/main/cli/pwsh/console-wingman.ps1" -OutFile "$HOME\Documents\PowerShell\console-wingman.ps1"
+# Source it in the profile
+if (!(Test-Path $PROFILE)) { New-Item -Path $PROFILE -ItemType File -Force }; Add-Content -Path $PROFILE -Value "`n. `"$HOME\Documents\PowerShell\console-wingman.ps1`""
+```
 
 ## Usage
 
