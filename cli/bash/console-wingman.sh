@@ -1,16 +1,6 @@
 console-wingman-widget() {
-    if ! command -v jq &> /dev/null; then
-      echo -e "\033[31m[ERROR]\033[0m jq not found on path! try: sudo apt install jq" >&2
-      return 1
-    fi
-
-    if ! command -v curl &> /dev/null; then
-      echo -e "\033[31m[ERROR]\033[0m curl not found on path! try: sudo apt install curl" >&2
-      return 1
-    fi
-
-    if [ ! -v GEMINI_API_KEY ]; then
-      echo -e "\033[31m[ERROR]\033[0m GEMINI_API_KEY env var not set!" >&2
+    if ! command -v claude &> /dev/null; then
+      echo -e "\033[31m[ERROR]\033[0m claude not found on path!" >&2
       return 1
     fi
 
@@ -24,20 +14,12 @@ Command should be suitable for Linux/Unix OS with bash.
 Output only the command, do not include any additional text.
 Do not include any quotes or backticks in the output."
 
-    local payload="{ \"contents\": [ { \"parts\": [ { \"text\": \"$prompt\" } ] } ] }"
+    local new_command
+    new_command=$(claude -p --model haiku "$prompt" 2>&1)
+    local exit_code=$?
 
-    local response=$(curl -s \
-        -X POST \
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent" \
-        -H "x-goog-api-key: $GEMINI_API_KEY" \
-        -H "Content-Type: application/json" \
-        -d "$payload")
-
-    local new_command=$(echo "$response" | jq -r '.candidates[0].content.parts[0].text // empty' 2>/dev/null)
-
-    if [ -z "$new_command" ]; then
-        local error_msg=$(echo "$response" | jq -r '.error.message // "Unknown error"' 2>/dev/null)
-        echo -e "\033[31m[ERROR]\033[0m $error_msg" >&2
+    if [ $exit_code -ne 0 ] || [ -z "$new_command" ]; then
+        echo -e "\033[31m[ERROR]\033[0m ${new_command:-Failed to get response from claude}" >&2
         return 1
     else
       READLINE_LINE=$new_command

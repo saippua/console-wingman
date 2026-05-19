@@ -8,27 +8,21 @@ User wants assistance with the following command:
 
 $Line
 
-Respond with a command that can be used to achieve the desired result.\n\
+Respond with a command that can be used to achieve the desired result.
 Command should be suitable for Windows OS with powershell.
 Output only the command, do not include any additional text.
 Do not include any quotes or backticks in the output."
 
-      $payload = @{ contents = @( @{ parts = @( @{ text = $prompt } ) } ) }
-      $response = Invoke-RestMethod `
-        -Uri "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent" `
-        -SkipHttpErrorCheck `
-        -Method POST `
-        -Headers @{
-          "x-goog-api-key" = $env:GEMINI_API_KEY
-          "Content-Type" = "application/json"
-        } `
-        -Body ($payload | ConvertTo-Json -Depth 5)
-
       try {
-        return $response.candidates[0].content.parts[0].text
+        $response = claude -p --model haiku $prompt 2>&1
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host -Foreground Red "[ERROR] $response"
+          return $null
+        }
+        return $response
       } catch {
-        Write-Host -Foreground Red -Message "[ERROR] " -NoNewLine
-        Write-Host $response.error.message
+        Write-Host -Foreground Red "[ERROR] $($_.Exception.Message)"
+        return $null
       }
     }
 
@@ -37,9 +31,8 @@ Do not include any quotes or backticks in the output."
     [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$line, [ref]$cursor)
     [Microsoft.PowerShell.PSConsoleReadLine]::BackwardKillLine()
 
-    # $newCommand = $line | cli-lookup --pwsh
     $newCommand = Get-AI-Command -Line $line
-    
+
     if ($newCommand) {
         [Microsoft.PowerShell.PSConsoleReadLine]::BackwardKillLine()
         [Microsoft.PowerShell.PSConsoleReadLine]::Insert($newCommand)

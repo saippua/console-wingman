@@ -4,8 +4,7 @@ A command-line assistant that transforms natural language descriptions into shel
 
 ## Prerequisites
 
-- set `GEMINI_API_KEY` environment variable (https://aistudio.google.com/app/api-keys)
-- `jq` for JSON parsing (required on linux only)
+- the `claude` CLI installed, authenticated, and available on `PATH` (https://docs.claude.com/claude-code)
 
 ### Supported platforms
 
